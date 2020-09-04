@@ -1,0 +1,49 @@
+angular-training/sales-project/node_modules/
+typescript-training/**/*.js
+
+
+#ecommerce-project-----------------------------------------------------------------------------------------
+#back-end
+
+ecommerce-project/spring-boot-ecommerce/HELP.md
+ecommerce-project/spring-boot-ecommerce/target/
+!ecommerce-project/spring-boot-ecommerce/.mvn/wrapper/maven-wrapper.jar
+!ecommerce-project/spring-boot-ecommerce/**/src/main/**/target/
+!ecommerce-project/spring-boot-ecommerce/**/src/test/**/target/
+
+### STS ###
+ecommerce-project/spring-boot-ecommerce/.apt_generated
+ecommerce-project/spring-boot-ecommerce/.classpath
+ecommerce-project/spring-boot-ecommerce/.factorypath
+ecommerce-project/spring-boot-ecommerce/.project
+ecommerce-project/spring-boot-ecommerce/.settings
+ecommerce-project/spring-boot-ecommerce/.springBeans
+ecommerce-project/spring-boot-ecommerce/.sts4-cache
+
+### IntelliJ IDEA ###
+ecommerce-project/spring-boot-ecommerce/.idea
+ecommerce-project/spring-boot-ecommerce/*.iws
+ecommerce-project/spring-boot-ecommerce/*.iml
+ecommerce-project/spring-boot-ecommerce/*.ipr
+
+### NetBeans ###
+ecommerce-project/spring-boot-ecommerce/nbproject/private/
+ecommerce-project/spring-boot-ecommerce/nbbuild/
+ecommerce-project/spring-boot-ecommerce/dist/
+ecommerce-project/spring-boot-ecommerce/nbdist/
+ecommerce-project/spring-boot-ecommerce/.nb-gradle/
+ecommerce-project/spring-boot-ecommerce/build/
+!ecommerce-project/spring-boot-ecommerce/**/src/main/**/build/
+!ecommerce-project/spring-boot-ecommerce/**/src/test/**/build/
+
+### VS Code ###
+ecommerce-project/spring-boot-ecommerce/.vscode/
+
+
+#front-end
+
+ecommerce-project/angular-ecommerce/node_modules/
+
+
+
+
