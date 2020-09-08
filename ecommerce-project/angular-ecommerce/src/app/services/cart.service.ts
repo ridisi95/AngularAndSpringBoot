@@ -1,20 +1,30 @@
 import { Injectable } from '@angular/core';
 import { CartItem } from '../common/cart-item';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
 
-  cartItems: CartItem[] = [];
-  totalPrice: Subject<number> = new Subject<number>();
-  totalQuantity: Subject<number> = new Subject<number>();
+  cartItems: CartItem[];
+  totalPrice: Subject<number>;
+  totalQuantity: Subject<number>;
 
-  constructor() {}
+  constructor() {
+    let sessionCartItems = JSON.parse(sessionStorage.getItem('cartItems'));
+    if (sessionCartItems === null) {
+      this.cartItems = [];
+      this.totalPrice = new BehaviorSubject<number>(0);
+      this.totalQuantity = new BehaviorSubject<number>(0);
+    } else {
+      this.cartItems = sessionCartItems;
+      this.totalPrice = new BehaviorSubject<number>(this.computeCartTotalPrice(this.cartItems));
+      this.totalQuantity = new BehaviorSubject<number>(this.computeCartTotalQuantity(this.cartItems));
+    }
+  }
 
   addToCart(theCartItem: CartItem) {
-    let alreadyExistsInCart: boolean = false;
     let existingCartItem: CartItem = undefined;
 
     if (this.cartItems.length > 0) {
@@ -28,19 +38,13 @@ export class CartService {
       this.cartItems.push(theCartItem);
     }
 
-    this.computeCartTotals();
+    this.updateCartTotals();
   }
 
-  computeCartTotals() {
+  updateCartTotals() {
 
-    let totalPriceValue: number = 0;
-    let totalQuantityValue: number = 0;
-
-
-    for (let currentCartItem of this.cartItems) {
-      totalPriceValue += currentCartItem.quantity * currentCartItem.unitPrice;
-      totalQuantityValue += currentCartItem.quantity;
-    }
+    let totalPriceValue: number = this.computeCartTotalPrice(this.cartItems);
+    let totalQuantityValue: number = this.computeCartTotalQuantity(this.cartItems);
 
     // publish the new values to all subscribers.
     // every subscriber will receive the new data
@@ -48,7 +52,17 @@ export class CartService {
     this.totalQuantity.next(totalQuantityValue);
 
     this.logCartData(totalPriceValue, totalQuantityValue);
+    this.persistCartItems();
   }
+
+  computeCartTotalPrice(cartItems: CartItem[]) : number {
+     return cartItems.map(a => a.unitPrice * a.quantity).reduce((a,b) => a + b);
+  }
+
+  computeCartTotalQuantity(cartItems: CartItem[]) : number {
+    return cartItems.map(a => a.quantity).reduce((a,b) => a + b);
+  }
+
 
   logCartData(totalPriceValue: number, totalQuantityValue: number) {
 
@@ -71,7 +85,7 @@ export class CartService {
     if (theCartItem.quantity === 0) {
       this.remove(theCartItem);
     } else {
-      this.computeCartTotals();
+      this.updateCartTotals();
     }
   }
 
@@ -82,8 +96,12 @@ export class CartService {
     if (itemIndex > -1) {
       this.cartItems.splice(itemIndex, 1);
 
-      this.computeCartTotals();
+      this.updateCartTotals();
     }
+  }
+
+  persistCartItems(){
+    sessionStorage.setItem('cartItems', JSON.stringify(this.cartItems));
   }
 
 }

@@ -31,11 +31,13 @@ export class CartDetailsComponent implements OnInit {
     this.cartService.totalQuantity.subscribe(
       data => this.totalQuantity = data
     );
-
-    this.cartService.computeCartTotals();
   }
 
   incrementQuantity(theCartItem: CartItem) {
+    console.log("this.totalPrice: " + this.totalPrice);
+    console.log("this.cartService.totalPrice: " + this.cartService.totalPrice);
+    console.log("this.totalPrice: " + this.totalQuantity);
+    console.log("this.cartService.totalPrice: " + this.cartService.totalQuantity);
     this.cartService.addToCart(theCartItem);
   }
 

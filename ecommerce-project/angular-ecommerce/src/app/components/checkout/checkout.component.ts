@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Luv2ShopFormService } from '../../services/luv2-shop-form.service'
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
+import { CountryISO } from 'ngx-intl-tel-input';
+import { CartService } from 'src/app/services/cart.service';
 
 @Component({
   selector: 'app-checkout',
@@ -10,6 +12,8 @@ import { State } from 'src/app/common/state';
   styleUrls: ['./checkout.component.css']
 })
 export class CheckoutComponent implements OnInit {
+
+  CountryISO = CountryISO;
 
   checkoutFormGroup: FormGroup;
 
@@ -25,16 +29,19 @@ export class CheckoutComponent implements OnInit {
   billingAddressStates: State[] = [];
 
   constructor(private formBuilder: FormBuilder,
-    private luv2ShopFormService: Luv2ShopFormService) { }
+    private luv2ShopFormService: Luv2ShopFormService,
+    private cartService: CartService) { }
 
   ngOnInit(): void {
+    this.updateCartStatus();
 
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: new FormControl('', [Validators.required, Validators.minLength(2)]),
         lastName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+        phone: new FormControl('', [Validators.required]),
         email: new FormControl('', [Validators.required,
-           Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')])
+          Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')])
       }),
 
       shippingAddress: this.formBuilder.group({
@@ -93,9 +100,21 @@ export class CheckoutComponent implements OnInit {
     )
   }
 
+  updateCartStatus() {
+    // subscribe to the cart totalPrice and totalQuantity
+    this.cartService.totalPrice.subscribe(
+      data => this.totalPrice = data
+    );
+
+    this.cartService.totalQuantity.subscribe(
+      data => this.totalQuantity = data
+    )
+  }
+
   // these getters are needed for validations and they are used on html.
   get firstName() { return this.checkoutFormGroup.get('customer.firstName'); }
   get lastName() { return this.checkoutFormGroup.get('customer.lastName'); }
+  get phone() { return this.checkoutFormGroup.get('customer.phone'); }
   get email() { return this.checkoutFormGroup.get('customer.email'); }
 
   copyShippingAddressToBillingAddress(event) {
