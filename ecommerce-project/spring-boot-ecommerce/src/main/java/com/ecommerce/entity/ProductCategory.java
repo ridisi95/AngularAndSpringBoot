@@ -1,6 +1,5 @@
-package com.luv2code.ecommerce.entity;
+package com.ecommerce.entity;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

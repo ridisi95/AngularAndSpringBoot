@@ -5,6 +5,7 @@ import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
 import { CountryISO } from 'ngx-intl-tel-input';
 import { CartService } from 'src/app/services/cart.service';
+import {CustomValidators} from "../../validators/custom-validators";
 
 @Component({
   selector: 'app-checkout',
@@ -98,6 +99,13 @@ export class CheckoutComponent implements OnInit {
         this.countries = data;
       }
     )
+  }
+
+  private createDefaultFormControl(): FormControl {
+    return new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+      CustomValidators.notOnlyWhitespace]);
   }
 
   updateCartStatus() {
